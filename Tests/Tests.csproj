@@ -17,7 +17,7 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Example\Example.csproj" />
+      <ProjectReference Include="..\Bowling\Bowling.csproj" />
     </ItemGroup>
 
 </Project>
