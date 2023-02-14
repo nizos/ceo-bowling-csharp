@@ -29,4 +29,56 @@ public static class Utils
         }
         return rounds;
     }
+
+    public static int GetTotalSpares(List<int> rounds)
+    {
+        var total = 0;
+        var previous = 0;
+        var firstAttempt = true;
+        foreach (var current in rounds)
+        {
+            if (!firstAttempt)
+            {
+                if (previous + current == 10)
+                {
+                    total++;
+                }
+                firstAttempt = true;
+            }
+            else
+            {
+                if (current != 10)
+                {
+                    firstAttempt = false;
+                }
+            }
+            previous = current;
+        }
+        return total;
+    }
+    
+    public static int GetTotalStrikes(List<int> rounds)
+    {
+        var total = 0;
+        var firstAttempt = true;
+        foreach (var current in rounds)
+        {
+            if (firstAttempt)
+            {
+                if (current == 10)
+                {
+                    total++;
+                }
+                else
+                {
+                    firstAttempt = false;
+                }
+            }
+            else
+            {
+                firstAttempt = true;
+            }
+        }
+        return total;
+    }
 }
