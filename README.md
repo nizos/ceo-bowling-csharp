@@ -1,6 +1,6 @@
-# TDD Starter for C#
+# CEO Bowling in C#
 
-This project provides a simple starter for TDD and uses the [NUnit Framework](https://nunit.org/) for testing. More information on how to use NUnit with C# can be found [here](https://learn.microsoft.com/en-us/dotnet/core/testing/unit-testing-with-nunit).
+This is a C# implementation of the TDD kata [Raniz85/ceo-bowling-kata](https://github.com/Raniz85/ceo-bowling-kata).
 
 ## Requirements
 
