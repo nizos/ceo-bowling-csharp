@@ -1,4 +1,5 @@
 using Bowling;
+using Bowling.ScoringStrategy;
 
 namespace Tests;
 
@@ -84,9 +85,30 @@ public class ScoringStrategyTests
     };
     
     [TestCaseSource(nameof(ElectricBoogalooScoringTestCaseSource))]
-    public void ElectricBoogalooScoring(Frame frame, int score)
+    public void ElectricBoogaloo(Frame frame, int score)
     {
         var scoring = new ElectricBoogalooScoring();
+        Assert.That(scoring.GetScore(frame), Is.EqualTo(score));
+    }
+    
+    private static readonly object[] CombinedScoringTestCaseSource = 
+    {
+        new object[] {new Frame()
+        {
+            Name = "Yatas Del Lana",
+            Rounds = new List<int>() {3, 5, 3, 5, 7, 2, 3, 0, 10, 4, 3},
+        }, 45+55+55+52},
+        new object[] {new Frame()
+        {
+            Name = "Eve Stojbs",
+            Rounds = new List<int>() {3, 7, 3, 3, 9, 1, 6, 4, 2, 3, 1, 0},
+        }, 42+57+60+53}
+    };
+    
+    [TestCaseSource(nameof(CombinedScoringTestCaseSource))]
+    public void CombinedScoring(Frame frame, int score)
+    {
+        var scoring = new CombinedScoring();
         Assert.That(scoring.GetScore(frame), Is.EqualTo(score));
     }
 }

@@ -30,9 +30,9 @@ public static class Utils
         return rounds;
     }
 
-    public static int GetTotalSpares(List<int> rounds)
+    public static int GetNrOfSpares(List<int> rounds)
     {
-        var total = 0;
+        var spares = 0;
         var previous = 0;
         var firstAttempt = true;
         foreach (var current in rounds)
@@ -41,7 +41,7 @@ public static class Utils
             {
                 if (previous + current == 10)
                 {
-                    total++;
+                    spares++;
                 }
                 firstAttempt = true;
             }
@@ -54,12 +54,12 @@ public static class Utils
             }
             previous = current;
         }
-        return total;
+        return spares;
     }
     
-    public static int GetTotalStrikes(List<int> rounds)
+    public static int GetNrOfStrikes(List<int> rounds)
     {
-        var total = 0;
+        var streaks = 0;
         var firstAttempt = true;
         foreach (var current in rounds)
         {
@@ -67,7 +67,7 @@ public static class Utils
             {
                 if (current == 10)
                 {
-                    total++;
+                    streaks++;
                 }
                 else
                 {
@@ -79,6 +79,96 @@ public static class Utils
                 firstAttempt = true;
             }
         }
-        return total;
+        return streaks;
+    }
+
+    public static int GetTotalSpareBonus(List<int> rounds)
+    {
+        var bonus = 0;
+        var previous = 0;
+        var firstAttempt = true;
+        for (var i = 0; i < rounds.Count; i++)
+        {
+            if (!firstAttempt)
+            {
+                if (previous + rounds[i] == 10)
+                {
+                    if (i + 1 < rounds.Count)
+                    {
+                        bonus += rounds[i + 1];
+                    }
+                }
+
+                firstAttempt = true;
+            }
+            else
+            {
+                if (rounds[i] != 10)
+                {
+                    firstAttempt = false;
+                }
+            }
+
+            previous = rounds[i];
+        }
+
+        return bonus;
+    }
+    
+    public static int GetTotalStrikeBonus(List<int> rounds)
+    {
+        var bonus = 0;
+        var firstAttempt = true;
+        for (var i = 0; i < rounds.Count; i++)
+        {
+            if (firstAttempt)
+            {
+                if (rounds[i] == 10)
+                {
+                    if (i + 2 < rounds.Count)
+                    {
+                        bonus += rounds[i + 1] + rounds[i + 2];;
+                    }
+                    else if (i + 1 < rounds.Count)
+                    {
+                        bonus += rounds[i + 1];
+                    }
+                }
+                else
+                {
+                    firstAttempt = false;
+                }
+            }
+            else
+            {
+                firstAttempt = true;
+            }
+        }
+
+        return bonus;
+    }
+
+    public static int GetTotalSpareStreakBonus(List<int> rounds)
+    {
+        var spareStreakBonus = 0;
+        var spares = GetNrOfSpares(rounds);
+        for (var i = 0; i < spares; i++)
+        {
+            spareStreakBonus += (i * 1) + 5;
+        }
+
+        return spareStreakBonus;
+    }
+    
+    public static int GetTotalStrikeStreakBonus(List<int> rounds)
+    {
+        var strikeStreakBonus = 0;
+        var strikes = GetNrOfStrikes(rounds);
+        for (var i = 0; i < strikes; i++)
+        {
+            strikeStreakBonus += (i * 2) + 10;
+        }
+
+        return strikeStreakBonus;
     }
 }

@@ -1,4 +1,4 @@
-namespace Bowling;
+namespace Bowling.ScoringStrategy;
 
 public class BasicScoring: IScoringStrategy
 {
