@@ -7,4 +7,5 @@ public struct Frame
     public int Score;
     public int Spares;
     public int Strikes;
+    public int Total;
 }
