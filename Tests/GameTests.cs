@@ -118,4 +118,24 @@ public class GameTests
             Assert.That(winner.Score, Is.EqualTo(expected.Score));
         });
     }
+    
+    [Test]
+    public void GetWinnerByElectricBoogalooScoring()
+    {
+        var game = new Game("TestData.txt", new ElectricBoogalooScoring());
+        var expected = new Frame
+        {
+            Name = "Eve Stojbs",
+            Rounds = new List<int>() {3, 7, 3, 3, 9, 1, 6, 4, 2, 3, 1, 0},
+            Score = 53
+        };
+
+        var winner = game.GetWinner();
+        Assert.Multiple(() =>
+        {
+            Assert.That(winner.Name, Is.EqualTo(expected.Name));
+            Assert.That(winner.Rounds, Is.EqualTo(expected.Rounds));
+            Assert.That(winner.Score, Is.EqualTo(expected.Score));
+        });
+    }
 }

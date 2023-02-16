@@ -24,5 +24,11 @@ class GFG {
         var series3Winner = series3.GetWinner();
         Console.WriteLine("Series 3 winner is:");
         Console.WriteLine("{0} ({1} points).", series3Winner.Name, series3Winner.Score);
+        
+        // Series 4
+        var series4 = new Game("Series4.txt", new ElectricBoogalooScoring());
+        var series4Winner = series4.GetWinner();
+        Console.WriteLine("Series 4 winner is:");
+        Console.WriteLine("{0} ({1} points).", series4Winner.Name, series4Winner.Score);
     }
 }
