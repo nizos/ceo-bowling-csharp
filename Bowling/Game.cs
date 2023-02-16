@@ -7,16 +7,33 @@ public class Game
     private readonly string _fileName;
     private const string DataPath = "../../../../Bowling/Data/";
     private readonly List<Frame> _frames = new();
+    private readonly IScoringStrategy _scoringStrategy;
 
     public Game()
     {
         _fileName = "Series1.txt";
+        _scoringStrategy = new BasicScoring();
         LoadGame();
     }
 
     public Game(string fileName)
     {
         _fileName = fileName;
+        _scoringStrategy = new BasicScoring();
+        LoadGame();
+    }
+    
+    public Game(IScoringStrategy scoringStrategy)
+    {
+        _fileName = "Series1.txt";
+        _scoringStrategy = scoringStrategy;
+        LoadGame();
+    }
+    
+    public Game(string fileName, IScoringStrategy scoringStrategy)
+    {
+        _fileName = fileName;
+        _scoringStrategy = scoringStrategy;
         LoadGame();
     }
 
@@ -30,13 +47,12 @@ public class Game
         var lines = File.ReadAllLines(DataPath + _fileName);
         foreach (var line in lines)
         {
-            var frame = new Frame();
-            frame.Name = Utils.GetPlayerName(line);
-            frame.Rounds = Utils.GetPlayerRounds(line);
-            frame.Score = frame.Rounds.Sum();
-            frame.Spares = Utils.GetTotalSpares(frame.Rounds);
-            frame.Strikes = Utils.GetTotalStrikes(frame.Rounds);
-            frame.Total = frame.Score + (frame.Spares * 5) + (frame.Strikes * 10);
+            var frame = new Frame
+            {
+                Name = Utils.GetPlayerName(line),
+                Rounds = Utils.GetPlayerRounds(line)
+            };
+            frame.Score = _scoringStrategy.GetScore(frame);
             _frames.Add(frame);
         }
     }
@@ -46,20 +62,10 @@ public class Game
         return _frames;
     }
 
-    public Frame GetWinnerByScore()
+    public Frame GetWinner()
     {
         var winner = new Frame();
         foreach (var frame in _frames.Where(frame => frame.Score > winner.Score))
-        {
-            winner = frame;
-        }
-        return winner;
-    }
-    
-    public Frame GetWinnerByTotal()
-    {
-        var winner = new Frame();
-        foreach (var frame in _frames.Where(frame => frame.Total > winner.Total))
         {
             winner = frame;
         }
