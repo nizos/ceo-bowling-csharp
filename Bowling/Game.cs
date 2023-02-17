@@ -5,56 +5,61 @@ namespace Bowling;
 
 public class Game
 {
-    private readonly string _fileName;
     private const string DataPath = "../../../../Bowling/Data/";
     private readonly List<Frame> _frames = new();
     private readonly IScoringStrategy _scoringStrategy;
 
     public Game()
     {
-        _fileName = "Series1.txt";
         _scoringStrategy = new BasicScoring();
-        LoadGame();
-    }
-
-    public Game(string fileName)
-    {
-        _fileName = fileName;
-        _scoringStrategy = new BasicScoring();
-        LoadGame();
     }
     
     public Game(IScoringStrategy scoringStrategy)
     {
-        _fileName = "Series1.txt";
         _scoringStrategy = scoringStrategy;
-        LoadGame();
+    }
+
+    public static List<string> ReadData(string fileName)
+    {
+        return File.ReadAllLines(DataPath + fileName).ToList();
     }
     
-    public Game(string fileName, IScoringStrategy scoringStrategy)
+    public void AddFrame(string frameString)
     {
-        _fileName = fileName;
-        _scoringStrategy = scoringStrategy;
-        LoadGame();
-    }
-
-    public List<string> ReadData()
-    {
-        return File.ReadAllLines(DataPath + _fileName).ToList();
-    }
-
-    private void LoadGame()
-    {
-        var lines = File.ReadAllLines(DataPath + _fileName);
-        foreach (var line in lines)
+        if (_frames.Any(frame => frame.Name == Utils.GetPlayerName(frameString))) return;
+        var frame = new Frame
         {
-            var frame = new Frame
-            {
-                Name = Utils.GetPlayerName(line),
-                Rounds = Utils.GetPlayerRounds(line)
-            };
+            Name = Utils.GetPlayerName(frameString),
+            Rounds = Utils.GetPlayerRounds(frameString)
+        };
+        frame.Score = _scoringStrategy.GetScore(frame);
+        _frames.Add(frame);
+    }
+    
+    public void AddRounds(string frameString)
+    {
+        var index = _frames.FindIndex(frame => frame.Name == Utils.GetPlayerName(frameString));
+        if (index < 0) return;
+        {
+            var frame = _frames[index];
+            frame.Rounds.AddRange(Utils.GetPlayerRounds(frameString));
             frame.Score = _scoringStrategy.GetScore(frame);
-            _frames.Add(frame);
+            _frames[index] = frame;
+        }
+    }
+
+    public void LoadData(string fileName)
+    {
+        foreach (var line in ReadData(fileName))
+        {
+            if (_frames.Any(frame => frame.Name == Utils.GetPlayerName(line)))
+            {
+                AddRounds(line);
+            }
+            else
+            {
+                AddFrame(line);
+            }
         }
     }
 
